@@ -12,18 +12,17 @@ define(function(require, exports, module) {
         this.mainNode = this; // jsuti n case we need a modifier
         _createLightbox.call(this)
         this.currentIndex = 0
-        var gridView = new GridView();
+        opts = this.options;
+        var gridView = new GridView({size:[opts.size[0],opts.size[1]-100]});
+        console.log(gridView.options.size);
         // add the instance to app view
         this.grids = [];
-        this.grids.push(gridView);     
-        console.log(this.grids)
-        console.log(this.lightbox)   
+        this.grids.push(gridView);        
         this.mainNode.lightbox.show(this.grids[0])
     }
-    function _greateGrids()
+    function _createGrids(){}
     function _createLightbox(){
         this.lightbox = new Lightbox();
-        console.log(this.lightbox)
         this.mainNode.add(this.lightbox);
     }
 
@@ -32,9 +31,8 @@ define(function(require, exports, module) {
     LedAppView.prototype.constructor = LedAppView;
 
     LedAppView.DEFAULT_OPTIONS = {
-        
+        size : [450,500]        
     };
 
-     
     module.exports = LedAppView;
 });

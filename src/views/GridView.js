@@ -25,36 +25,19 @@ define(function(require, exports, module) {
         });
         this.mainNode.add(surf);
         _squareSize.call(this);
-        //_createGrid.call(this);
-        _gride.call(this);
+        _grid.call(this);
 
     }
     function _squareSize(){
         var that = this.options
-        //totarea = that.size[0] * that.size[1];
-        //squareArea = totarea/(that.layout[0]*that.layout[1]);
-        //that.squareSize = Math.sqrt (squareArea)-20;
         effectiveSize = [that.size[0]- 2*that.spacing, this.options.size[1]- 1*that.spacing];
         that.squareSize = (effectiveSize[0] - (that.layout[0]-1)*that.spacing)/that.layout[0];
     }
-    function _createGrid(){
-        this.grid = [];
-        var that = this.options
-        for (var i=0;i<that.layout[0];i++){
-            for(var j=0;j<that.layout[1];j++){
-                squarePosition = [(i)*that.squareSize+that.spacing*(i+1),(j)*that.squareSize+that.spacing*(j+1)];
-                console.log(squarePosition)
-                this.surfaceWithModifier(squarePosition);
-            }
-        }
-    }
-
-    function _gride(){
+    function _grid(){
         var opt = this.options
         var grid = new GridLayout({
             dimensions:[opt.layout[0],opt.layout[1]]
         });
-
         var surfaces = [];
         grid.sequenceFrom(surfaces);
         for(var i = 0;i<opt.layout[0]*opt.layout[1];i++){
@@ -70,12 +53,10 @@ define(function(require, exports, module) {
                 }
             }));
         }
-        console.log(surfaces[1])
         this.mainNode.add(grid);
-        console
     }
 
-    // Establishes prototype chain for EmptyView class to inherit from View
+    // Establishes prototype chain for GridView class to inherit from View
     GridView.prototype = Object.create(View.prototype); // functions within View objects
     GridView.prototype.constructor = GridView;
     GridView.prototype.surfaceWithModifier = function(squarePosition){
