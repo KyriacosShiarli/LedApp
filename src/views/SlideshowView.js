@@ -11,12 +11,15 @@ define(function(require, exports, module) {
         
         this.rootModifier = new StateModifier ({
             size : this.options.size,
-            align : [0.5,0],
-            origin : [0.5,0]
+            align : [0,0],
+            origin : [0,0]
         });
         this.mainNode = this.add(this.rootModifier);
         _createLightbox.call(this);
         _createSlides.call(this);
+            this = that
+        console.log(this)
+        console.log(that)
     }
 
     function _createSlides(){
@@ -41,7 +44,7 @@ define(function(require, exports, module) {
 
     SlideshowView.prototype = Object.create(View.prototype);
     SlideshowView.prototype.constructor = SlideshowView;
-     SlideshowView.prototype.showCurrentSlide = function() {
+    SlideshowView.prototype.showCurrentSlide = function() {
         var slide = this.slides[this.currentIndex];
         this.lightbox.show(slide, function() {
             slide.fadeIn();

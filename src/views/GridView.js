@@ -15,7 +15,7 @@ define(function(require, exports, module) {
         View.apply(this, arguments);
         this.rootModifier = new StateModifier({
             size : this.options.size
-        });
+        });         
         this.mainNode = this.add(this.rootModifier);
         var surf = new Surface({
             size: this.size,
@@ -23,27 +23,24 @@ define(function(require, exports, module) {
                 backgroundColor:"#FFFFFF"
             }
         });
-        this.mainNode.add(surf);
-        _squareSize.call(this);
         _grid.call(this);
-
-    }
-    function _squareSize(){
-        var that = this.options
-        effectiveSize = [that.size[0]- 2*that.spacing, this.options.size[1]- 1*that.spacing];
-        that.squareSize = (effectiveSize[0] - (that.layout[0]-1)*that.spacing)/that.layout[0];
     }
     function _grid(){
         var opt = this.options
-        var grid = new GridLayout({
+        this.grid = new GridLayout({
             dimensions:[opt.layout[0],opt.layout[1]]
         });
-        var surfaces = [];
-        grid.sequenceFrom(surfaces);
+        this.surfaces = [];
+        this.grid.sequenceFrom(this.surfaces);
         for(var i = 0;i<opt.layout[0]*opt.layout[1];i++){
-            surfaces.push(new Surface({
-                content:"test" + (i+1),
-                size: [undefined,undefined],
+            _gridSurf.call(this);
+        }
+        this.mainNode.add(this.grid);
+    }
+
+    function _gridSurf(){
+        surf = new Surface({
+            size: [undefined,undefined],
                 properties:{
                     backgroundColor: "#FF0000",
                     color: "#404040",
@@ -51,10 +48,19 @@ define(function(require, exports, module) {
                     lineHeight: '200px',
                     textAlign: 'center'
                 }
-            }));
-        }
-        this.mainNode.add(grid);
+            });
+        surf.colorIndex = 0;
+        surf.possibleColors = ['#009900','#1a3ce1',"#FF0000"]
+        this.surfaces.push(surf);
+        surf.on('click',function(){
+            this.colorIndex++
+            if (this.colorIndex==this.possibleColors.length){this.colorIndex=0}
+            this.setProperties({backgroundColor: this.possibleColors[this.colorIndex]})
+        });
+
     }
+
+
 
     // Establishes prototype chain for GridView class to inherit from View
     GridView.prototype = Object.create(View.prototype); // functions within View objects
@@ -75,8 +81,8 @@ define(function(require, exports, module) {
     
     GridView.DEFAULT_OPTIONS = {
         size: [400,450],
-        layout : [20,10],
-        spacing: 5
+        layout : [50,50],
+        
     };
     // Define your helper functions and prototype methods here
     module.exports = GridView;

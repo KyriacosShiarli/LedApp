@@ -9,29 +9,49 @@ define(function(require, exports, module) {
     var Lightbox = require('famous/views/Lightbox');
     function LedAppView() {
         View.apply(this, arguments);
-        this.mainNode = this; // jsuti n case we need a modifier
-        _createLightbox.call(this)
         this.currentIndex = 0
-        opts = this.options;
-        var gridView = new GridView({size:[opts.size[0],opts.size[1]-100]});
-        console.log(gridView.options.size);
-        // add the instance to app view
-        this.grids = [];
-        this.grids.push(gridView);        
-        this.mainNode.lightbox.show(this.grids[0])
+        this.rootModifier = new StateModifier({
+            size:this.options.size,
+            align:[0,0],
+            origin:[0,0]
+
+        });
+        this.mainNode = this.add(this.rootModifier); // jsuti n case we need a modifier
+        _createLightbox.call(this);
+        _createGrids.call(this);
+        this.showCurrentGrid();
     }
-    function _createGrids(){}
+    function _createGrids(){ // create 2 grids so that you are always one ahead
+        this.grids = [];
+        opts = this.options;
+        for (i =0;i<2;i++){
+            var grid = new GridView({size:[opts.size[0],opts.size[1]-100]});
+            console.log(grid)
+            this.grids.push(grid);
+        }
+    } 
     function _createLightbox(){
-        this.lightbox = new Lightbox();
+        this.lightbox = new Lightbox(this.options.lightboxOpts);
         this.mainNode.add(this.lightbox);
     }
 
     LedAppView.prototype = Object.create(View.prototype);
     LedAppView.prototype.constructor = LedAppView;
-    LedAppView.prototype.constructor = LedAppView;
+    LedAppView.prototype.showCurrentGrid = function(){
+        grid = this.grids[this.currentIndex];
+        this.lightbox.show(grid);
+    };
 
     LedAppView.DEFAULT_OPTIONS = {
-        size : [450,500]        
+        size : [800,900],  
+        lightboxOpts : {
+            inOpacity: 1,
+            outOpacity: 0,
+            inOrigin: [0, 0],
+            outOrigin: [0, 0],
+            showOrigin: [0, 0],
+
+        }      
     };
 
     module.exports = LedAppView;
