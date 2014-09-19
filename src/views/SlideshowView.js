@@ -17,9 +17,7 @@ define(function(require, exports, module) {
         this.mainNode = this.add(this.rootModifier);
         _createLightbox.call(this);
         _createSlides.call(this);
-            this = that
-        console.log(this)
-        console.log(that)
+
     }
 
     function _createSlides(){
@@ -57,11 +55,11 @@ define(function(require, exports, module) {
     }
 
     SlideshowView.DEFAULT_OPTIONS = {
-        size: [400,450], 
+        size: [20,20], 
         lightboxOpts : {
-            inOpacity: 1,
-            outOpacity: 0,
-            inOrigin: [0, 0],
+            inOpacity: 2,
+            outOpacity: 2,
+            inOrigin: [0.5, 0],
             outOrigin: [0, 0],
             showOrigin: [0, 0],
 

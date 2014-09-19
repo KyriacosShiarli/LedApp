@@ -42,15 +42,15 @@ define(function(require, exports, module) {
         surf = new Surface({
             size: [undefined,undefined],
                 properties:{
-                    backgroundColor: "#FF0000",
+                    backgroundColor: "#ffffff",
                     color: "#404040",
-                    boxShadow: '0 2px 2px 2px rgba(0, 0, 0,0.5)',
+                    boxShadow: '0 0px 7px 2px rgba(30, 30, 30,0.4)',
                     lineHeight: '200px',
                     textAlign: 'center'
                 }
             });
         surf.colorIndex = 0;
-        surf.possibleColors = ['#009900','#1a3ce1',"#FF0000"]
+        surf.possibleColors = ['#009900','#1a3ce1',"#FF0000","#ffffff"]
         this.surfaces.push(surf);
         surf.on('click',function(){
             this.colorIndex++
@@ -71,10 +71,18 @@ define(function(require, exports, module) {
         console.log(colors)
         return colors 
     }
+    GridView.prototype.cleanGrid = function(){
+        for(var i = 0 ; i<this.surfaces.length;i++){
+            this.surfaces[i].setProperties({backgroundColor :"#ffffff"})
+            this.surfaces[i].colorIndex = 0
+        }
+        this.grid.sequenceFrom(this.surfaces);
+    }
     GridView.DEFAULT_OPTIONS = {
         size: [400,450],
-        layout : [50,50],
+        layout : [20,20],
     };
+   //TODO : YOU NEED TO MAKE A TWO BUTTON VIEWS ONE FOR CHOOSING AND ONE FOR PLAYING
 
     // Define your helper functions and prototype methods here
     module.exports = GridView;

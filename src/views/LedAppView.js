@@ -12,14 +12,15 @@ define(function(require, exports, module) {
         this.currentIndex = 0
         this.rootModifier = new StateModifier({
             size:this.options.size,
-            align:[0,0],
-            origin:[0,0]
+            align:[0.5,0],
+            origin:[0.5,0]
 
         });
+        this.colors = []
         this.mainNode = this.add(this.rootModifier); // jsuti n case we need a modifier
         _createLightbox.call(this);
-        _createGrids.call(this);
         _nextButton.call(this);
+        _createGrids.call(this);
         this.showCurrentGrid();
         
     }
@@ -27,7 +28,7 @@ define(function(require, exports, module) {
         this.grids = [];
         opts = this.options;
         for (i =0;i<2;i++){
-            var grid = new GridView({size:[opts.size[0],opts.size[1]-20]});
+            var grid = new GridView({size:[opts.size[0],opts.size[1]-opts.buttonSize[1] + opts.buttonSpacing]});
             this.grids.push(grid);
         }
     } 
@@ -37,21 +38,30 @@ define(function(require, exports, module) {
     }
 
     function _nextButton(){
+        opts = this.options;
+        opts. buttonSize = [opts.size[0]/4,30]
         var nextButtonModifier = new StateModifier({
             align : [0,0],
             origin : [0,0],
-            transform : Transform.translate(0,this.options.size[1],1)
+            transform : Transform.translate(0,opts.size[1]+ opts.buttonSpacing,1)
         });
 
         var buttonSurf = new Surface({
-            size : this.options.buttonSize,
+            size : opts.buttonSize,
             content : "NEXT",
             properties :{
                 color: "#404040",
-                backgroundColor : '#D3D3D3'
+                fontFamily: "Times New Roman",
+                boxShadow: '0px 1px 3px 1px rgba(100, 0, 0,0.9)',
+                textAlign:'center',
+                backgroundColor : '#ea361f'
             }
         });
-        buttonSurf.on('click',function(){this.grids[0].getColours()}.bind(this))
+        buttonSurf.on('click',function(){
+            this.colors.push(this.grids[0].getColours())
+            console.log(this.grids[0].cleanGrid())
+            this.showCurrentGrid()
+        }.bind(this))
         this.mainNode.add(nextButtonModifier).add(buttonSurf);
     }
     LedAppView.prototype = Object.create(View.prototype);
@@ -62,13 +72,13 @@ define(function(require, exports, module) {
     };
 
     LedAppView.DEFAULT_OPTIONS = {
-        size : [400,400], 
-        buttonSize: [100,60],
+        size : [200,200], 
+        buttonSpacing: 10,
         lightboxOpts : {
-            inOpacity: 1,
+            inOpacity: 2,
             outOpacity: 0,
-            inOrigin: [0, 0],
-            outOrigin: [0, 0],
+            inOrigin: [0.5, 0.5],
+            outOrigin: [0.2, 0.2],
             showOrigin: [0, 0],
         }      
     };
