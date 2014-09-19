@@ -19,14 +19,15 @@ define(function(require, exports, module) {
         this.mainNode = this.add(this.rootModifier); // jsuti n case we need a modifier
         _createLightbox.call(this);
         _createGrids.call(this);
+        _nextButton.call(this);
         this.showCurrentGrid();
+        
     }
     function _createGrids(){ // create 2 grids so that you are always one ahead
         this.grids = [];
         opts = this.options;
         for (i =0;i<2;i++){
-            var grid = new GridView({size:[opts.size[0],opts.size[1]-100]});
-            console.log(grid)
+            var grid = new GridView({size:[opts.size[0],opts.size[1]-20]});
             this.grids.push(grid);
         }
     } 
@@ -35,6 +36,24 @@ define(function(require, exports, module) {
         this.mainNode.add(this.lightbox);
     }
 
+    function _nextButton(){
+        var nextButtonModifier = new StateModifier({
+            align : [0,0],
+            origin : [0,0],
+            transform : Transform.translate(0,this.options.size[1],1)
+        });
+
+        var buttonSurf = new Surface({
+            size : this.options.buttonSize,
+            content : "NEXT",
+            properties :{
+                color: "#404040",
+                backgroundColor : '#D3D3D3'
+            }
+        });
+        buttonSurf.on('click',function(){this.grids[0].getColours()}.bind(this))
+        this.mainNode.add(nextButtonModifier).add(buttonSurf);
+    }
     LedAppView.prototype = Object.create(View.prototype);
     LedAppView.prototype.constructor = LedAppView;
     LedAppView.prototype.showCurrentGrid = function(){
@@ -43,14 +62,14 @@ define(function(require, exports, module) {
     };
 
     LedAppView.DEFAULT_OPTIONS = {
-        size : [800,900],  
+        size : [400,400], 
+        buttonSize: [100,60],
         lightboxOpts : {
             inOpacity: 1,
             outOpacity: 0,
             inOrigin: [0, 0],
             outOrigin: [0, 0],
             showOrigin: [0, 0],
-
         }      
     };
 

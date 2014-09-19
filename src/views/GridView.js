@@ -33,12 +33,12 @@ define(function(require, exports, module) {
         this.surfaces = [];
         this.grid.sequenceFrom(this.surfaces);
         for(var i = 0;i<opt.layout[0]*opt.layout[1];i++){
-            _gridSurf.call(this);
+            _gridSurface.call(this);
         }
         this.mainNode.add(this.grid);
     }
 
-    function _gridSurf(){
+    function _gridSurface(){
         surf = new Surface({
             size: [undefined,undefined],
                 properties:{
@@ -57,33 +57,25 @@ define(function(require, exports, module) {
             if (this.colorIndex==this.possibleColors.length){this.colorIndex=0}
             this.setProperties({backgroundColor: this.possibleColors[this.colorIndex]})
         });
-
     }
-
-
 
     // Establishes prototype chain for GridView class to inherit from View
     GridView.prototype = Object.create(View.prototype); // functions within View objects
     GridView.prototype.constructor = GridView;
-    GridView.prototype.surfaceWithModifier = function(squarePosition){
-        var surface = new Surface({
-            size : [this.options.squareSize,this.options.squareSize],
-            properties:{
-            backgroundColor : '#FF0000',
-            boxShadow: '0 10px 20px -5px rgba(0, 0, 0, 0.5)'
-            }
-        });
-        var modifier = new StateModifier({
-            transform : Transform.translate(squarePosition[0],squarePosition[1],1)
-        })
-        this.mainNode.add(modifier).add(surface);
+    GridView.prototype.getColours = function() {
+        colors =[]
+        console.log(this.surfaces.length)
+        for (var i=0;i<this.surfaces.length;i++){
+            colors.push(this.surfaces[i].properties.backgroundColor);
+        }
+        console.log(colors)
+        return colors 
     }
-    
     GridView.DEFAULT_OPTIONS = {
         size: [400,450],
         layout : [50,50],
-        
     };
+
     // Define your helper functions and prototype methods here
     module.exports = GridView;
 });
